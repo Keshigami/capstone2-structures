@@ -1,0 +1,52 @@
+{
+  "train": {
+    "root": "/Users/keshigami/Caltech CTME/PGC AIML - Capstone/Datasets/Capstone 2/Part 1/dataset_hist_structures 2/dataset_hist_structures/Stuctures_Dataset",
+    "images": 10235,
+    "per_class": {
+      "altar": 829,
+      "apse": 514,
+      "bell_tower": 1059,
+      "column": 1919,
+      "dome(inner)": 616,
+      "dome(outer)": 1177,
+      "flying_buttress": 407,
+      "gargoyle": 1571,
+      "stained_glass": 1033,
+      "vault": 1110
+    },
+    "corrupt_removed": 0,
+    "corrupt_files": {},
+    "non_image_files_skipped": {}
+  },
+  "test": {
+    "root": "/Users/keshigami/Caltech CTME/PGC AIML - Capstone/Datasets/Capstone 2/Part 1/dataset_hist_structures 2/dataset_hist_structures/Dataset_test/Dataset_test_original_1478",
+    "images": 1473,
+    "per_class": {
+      "altar": 140,
+      "apse": 57,
+      "bell_tower": 170,
+      "column": 210,
+      "dome(inner)": 86,
+      "dome(outer)": 168,
+      "flying_buttress": 78,
+      "gargoyle": 238,
+      "stained_glass": 162,
+      "vault": 164
+    },
+    "corrupt_removed": 3,
+    "corrupt_files": {
+      "gargoyle": [
+        "0de19007-c9f0-4548-b070-7f67c55443de.jpg",
+        "d90864d8-0ae9-4929-b928-8e30fa7ea93f.jpg"
+      ],
+      "stained_glass": [
+        "9d1de848-bfd8-40e1-9686-0f8aba896655.jpg"
+      ]
+    },
+    "non_image_files_skipped": {
+      "bell_tower": [
+        "ren_tmp_jpg.bat"
+      ]
+    }
+  }
+}

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Structures classifier</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/static/ui.css">
+<style>
+  .gallery{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+  .gallery button{padding:0;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;overflow:hidden;color:var(--fg-2);text-align:center;cursor:pointer}
+  .gallery button img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+  .gallery button span{display:block;font-family:var(--mono);font-size:.68rem;padding:4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gallery button:hover,.gallery button.active{border-color:var(--accent)}
+  .preview{max-width:100%;max-height:260px;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto 12px}
+  .top3{display:grid;gap:10px;margin-top:12px} .top3 .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:4px}
+  .top3 .lbl b{font-family:var(--mono);font-weight:500} .top3 .first .lbl{color:var(--accent)} .top3 .first .lbl b{color:var(--accent)}
+  .stats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px}
+  .error{color:var(--danger)} .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>Structures classifier</h1>
+  <div class="sub">Upload a photo of a historical building detail and get its architectural category (10 classes) from a transfer-learned CNN.</div>
+  {% if metrics %}<span class="badge on">{{ metrics.backbone }} · {{ metrics.image_size }}px · {{ metrics.mode }}</span>{% endif %}
+  <span class="badge {% if model_loaded %}on{% endif %}">{% if model_loaded %}model loaded{% else %}no model{% endif %}</span>
+  <span class="badge">:{{ port }}</span>
+</header>
+
+{% if not model_loaded %}
+<div class="card" style="border-color:var(--warn);margin-bottom:16px">
+  <h2>No trained model</h2>
+  <p class="muted">{{ model_error }}</p>
+  <p>Run <code>just train</code> (about two minutes) and reload this page.</p>
+</div>
+{% endif %}
+
+<div class="grid">
+  <section class="card">
+    <h2>Classify an image</h2>
+    <form id="form" onsubmit="return false">
+      <div class="drop" id="drop">
+        <label for="input" style="cursor:pointer">Drop a photo here, choose a file, or click a sample below</label>
+        <input id="input" type="file" name="file" accept="image/*" style="margin-top:10px">
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="run" type="button" {% if not model_loaded %}disabled{% endif %}>Classify</button>
+        <span id="status" class="meta"></span>
+      </div>
+    </form>
+    <h3 style="margin-top:18px">Samples <span class="meta">one per class, from the held-out test set; click to classify</span></h3>
+    {% if samples %}
+    <div class="gallery" id="gallery">
+      {% for s in samples %}
+      <button type="button" data-sample="{{ s.slug }}" data-label="{{ s.label }}" title="{{ s.label }}">
+        <img src="{{ s.url }}" alt="{{ s.label }}" loading="lazy"><span>{{ s.label }}</span>
+      </button>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty">No samples yet: <code>just train</code> copies one test image per class here.</div>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Result</h2>
+    <div id="result" aria-live="polite">
+      <div class="empty">Pick a sample or upload a photo to see the top-3 classes.</div>
+    </div>
+  </section>
+</div>
+
+{% if metrics %}
+<section class="card" style="margin-top:16px">
+  <h2>Model numbers <span class="meta">{{ metrics.mode }} mode, this machine, {{ metrics.trained_at }}</span></h2>
+  <div class="stats">
+    <div class="stat"><b>{{ '%.1f' % (metrics.test_accuracy * 100) }}%</b><span>test accuracy ({{ metrics.images.test }} images)</span></div>
+    <div class="stat"><b>{{ '%.1f' % (metrics.val_accuracy * 100) }}%</b><span>best validation accuracy</span></div>
+    <div class="stat"><b>{{ '%.1f' % (metrics.train_accuracy * 100) }}%</b><span>train accuracy (epoch {{ metrics.best_epoch }}, the kept weights)</span></div>
+    <div class="stat"><b>{{ metrics.images.train }}</b><span>training images of {{ metrics.images.available_train }}</span></div>
+    <div class="stat"><b>{{ metrics.epochs.total }}</b><span>epochs ({{ metrics.epochs.baseline }} plain + {{ metrics.epochs.augmented }} augmented)</span></div>
+    <div class="stat"><b>{{ '%.0f' % metrics.wall_time_seconds }}s</b><span>wall time, train + eval</span></div>
+  </div>
+  <div class="grid">
+    {% if has_curves %}
+    <figure>
+      <img src="/curves.png" alt="training and validation accuracy and loss per epoch">
+      <figcaption>Train vs validation accuracy and loss per epoch. The dashed line is where augmentation switches on; a widening gap between the lines is overfitting.</figcaption>
+    </figure>
+    {% endif %}
+    <div>
+      <h3>Per-class test accuracy</h3>
+      <table>
+        <thead><tr><th>class</th><th>test images</th><th>accuracy</th><th></th></tr></thead>
+        <tbody>
+        {% for c, a in per_class %}
+        <tr><td>{{ c }}</td><td class="meta">{{ metrics.images.per_class_test[c] }}</td><td class="meta">{{ '%.1f' % (a * 100) }}%</td>
+            <td style="width:35%"><div class="bar"><i style="width:{{ (a * 100) | round(1) }}%"></i></div></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+</div>
+
+<script>
+(function () {
+  const input = document.getElementById('input');
+  const run = document.getElementById('run');
+  const result = document.getElementById('result');
+  const status = document.getElementById('status');
+  const drop = document.getElementById('drop');
+  const gallery = document.getElementById('gallery');
+  const modelLoaded = {{ 'true' if model_loaded else 'false' }};
+  let current = null;   // {kind: 'file'|'sample', file?, slug?, label?, url}
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function pct(p) { return (p * 100).toFixed(1) + '%'; }
+
+  function setBusy(busy, text) {
+    run.disabled = busy || !modelLoaded;
+    status.innerHTML = busy ? '<span class="spinner"></span> ' + esc(text || 'classifying…') : esc(text || '');
+  }
+
+  function render(data, previewUrl, truth) {
+    const rows = data.top.map((r, i) =>
+      `<div class="${i === 0 ? 'first' : ''}"><div class="lbl"><span>${esc(r.label)}</span><b>${pct(r.probability)}</b></div>` +
+      `<div class="bar"><i style="width:${(r.probability * 100).toFixed(1)}%"></i></div></div>`).join('');
+    const verdict = truth ? (truth === data.predicted
+      ? `<span class="pill ok">correct · labelled ${esc(truth)}</span>`
+      : `<span class="pill warn">labelled ${esc(truth)}</span>`) : '';
+    result.innerHTML = `${previewUrl ? `<img class="preview" src="${previewUrl}" alt="">` : ''}` +
+      `<div class="row"><span class="meta">${esc(data.filename)}</span>${verdict}</div>` +
+      `<div class="stat" style="margin:10px 0 4px"><b data-predicted="${esc(data.predicted)}">${esc(data.predicted)}</b><span>predicted class · ${pct(data.top[0].probability)} confidence</span></div>` +
+      `<div class="top3">${rows}</div>`;
+  }
+
+  async function classify() {
+    if (!current) { result.innerHTML = '<div class="empty">Choose a file or click a sample first.</div>'; return; }
+    const fd = new FormData();
+    if (current.kind === 'file') fd.append('file', current.file); else fd.append('sample', current.slug);
+    setBusy(true);
+    result.innerHTML = '<div class="empty"><span class="spinner"></span> classifying…</div>';
+    try {
+      const r = await fetch('/predict', { method: 'POST', body: fd });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.detail || r.statusText);
+      render(data, current.url, current.label);
+      setBusy(false, 'done');
+    } catch (e) {
+      result.innerHTML = `<div class="empty error">Could not classify: ${esc(e.message)}. Try a JPG or PNG photo, or a sample.</div>`;
+      setBusy(false, 'error');
+    }
+  }
+
+  function pickFile(file) {
+    if (!file) return;
+    current = { kind: 'file', file, label: null, url: URL.createObjectURL(file) };
+    document.querySelectorAll('#gallery button').forEach(b => b.classList.remove('active'));
+    setBusy(false, file.name);
+    classify();
+  }
+
+  input.addEventListener('change', () => pickFile(input.files[0]));
+  run.addEventListener('click', () => { if (input.files[0] && (!current || current.kind !== 'file')) pickFile(input.files[0]); else classify(); });
+  ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
+  if (gallery) gallery.addEventListener('click', e => {
+    const b = e.target.closest('button[data-sample]');
+    if (!b) return;
+    document.querySelectorAll('#gallery button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    current = { kind: 'sample', slug: b.dataset.sample, label: b.dataset.label, url: b.querySelector('img').src };
+    setBusy(false, b.dataset.label);
+    classify();
+  });
+})();
+</script>
+</body>
+</html>

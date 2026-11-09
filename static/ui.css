@@ -1,0 +1,36 @@
+/* Shared look for every service: one dark instrument panel, one accent, one type pairing.
+   Link it from any HTML page:  <link rel="stylesheet" href="/static/ui.css">  (copy or symlink common/ui.css into the app's static/)
+   Fonts: <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"> */
+:root{
+  --bg:#0c1018; --bg-2:#121826; --panel:#182033; --line:rgba(226,232,245,.12); --fg:#e8ecf6; --fg-2:#aab3c8; --fg-3:#7c869d;
+  --accent:#4fd1c5; --accent-dim:rgba(79,209,197,.14); --warn:#f2b84b; --danger:#f0718a; --ok:#6fe3a0;
+  --display:"Space Grotesk","Helvetica Neue",Arial,sans-serif; --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif; --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+  --r:12px; --gap:16px; color-scheme:dark;
+}
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto}
+header.top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:18px 0 10px;border-bottom:1px solid var(--line);margin-bottom:24px}
+header.top h1{font-family:var(--display);font-size:1.35rem;margin:0;letter-spacing:.01em} header.top .sub{color:var(--fg-3);font-size:.9rem;flex:1;min-width:0}
+header.top .badge{font-family:var(--mono);font-size:.75rem;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--fg-2)} header.top .badge.on{border-color:var(--accent);color:var(--accent)}
+h2{font-family:var(--display);font-size:1.15rem;margin:0 0 10px} h3{font-size:1rem;margin:0 0 6px;font-weight:600}
+p{margin:0 0 10px;max-width:64ch} .muted{color:var(--fg-2)} .meta{font-family:var(--mono);font-size:.78rem;color:var(--fg-3)}
+.grid{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0}
+.card.flat{background:var(--bg-2)}
+button,.btn{font:inherit;color:var(--bg);background:var(--accent);border:0;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+button.ghost,.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)} button:disabled{opacity:.5;cursor:default}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,textarea,select{font:inherit;color:var(--fg);background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;width:100%}
+textarea{min-height:120px;resize:vertical} label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:4px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.drop{border:1.5px dashed var(--line);border-radius:var(--r);padding:28px;text-align:center;color:var(--fg-2);cursor:pointer} .drop.over{border-color:var(--accent);background:var(--accent-dim)}
+table{width:100%;border-collapse:collapse;font-size:.92rem} th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top} th{color:var(--fg-2);font-weight:600;font-size:.82rem}
+.scroll{overflow-x:auto} pre,code{font-family:var(--mono);font-size:.84rem} pre{background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;margin:0}
+.bar{height:8px;border-radius:999px;background:var(--bg-2);overflow:hidden} .bar i{display:block;height:100%;background:var(--accent)}
+.pill{display:inline-block;font-family:var(--mono);font-size:.74rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--fg-2)} .pill.ok{border-color:var(--ok);color:var(--ok)} .pill.warn{border-color:var(--warn);color:var(--warn)} .pill.danger{border-color:var(--danger);color:var(--danger)}
+.stat{display:grid;gap:2px} .stat b{font-family:var(--display);font-size:1.6rem;font-weight:700;line-height:1} .stat span{font-size:.8rem;color:var(--fg-3)}
+figure{margin:0} figure img{max-width:100%;border-radius:8px;border:1px solid var(--line);display:block} figcaption{font-size:.82rem;color:var(--fg-3);margin-top:6px}
+.empty{color:var(--fg-3);padding:24px;text-align:center;border:1px dashed var(--line);border-radius:var(--r)}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle} @keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

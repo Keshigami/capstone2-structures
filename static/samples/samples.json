@@ -1,0 +1,52 @@
+{
+  "altar": {
+    "class": "altar",
+    "file": "altar.jpg",
+    "source": "00947185-77b4-4ecf-85ed-bf139c7d5a1d.jpg"
+  },
+  "apse": {
+    "class": "apse",
+    "file": "apse.jpg",
+    "source": "Kaymakli_monastery_pentagonal_apse.JPG"
+  },
+  "bell_tower": {
+    "class": "bell_tower",
+    "file": "bell_tower.jpg",
+    "source": "0864b672-a0e7-45ad-b431-c57711169cc6.jpg"
+  },
+  "column": {
+    "class": "column",
+    "file": "column.jpg",
+    "source": "003435da-d3ae-4f0d-9e21-fe203c11ab56.jpg"
+  },
+  "dome_inner": {
+    "class": "dome(inner)",
+    "file": "dome_inner.jpg",
+    "source": "150d3619-063b-416a-8a92-66d137093153.jpg"
+  },
+  "dome_outer": {
+    "class": "dome(outer)",
+    "file": "dome_outer.jpg",
+    "source": "04514cab-7d87-434e-9894-c3ce2600cc77.jpg"
+  },
+  "flying_buttress": {
+    "class": "flying_buttress",
+    "file": "flying_buttress.jpg",
+    "source": "23823769843_0b20578d8a_m.jpg"
+  },
+  "gargoyle": {
+    "class": "gargoyle",
+    "file": "gargoyle.jpg",
+    "source": "067aee46-2763-4de4-9903-ae63bc94bace.jpg"
+  },
+  "stained_glass": {
+    "class": "stained_glass",
+    "file": "stained_glass.jpg",
+    "source": "00bad39a-fd6f-4a53-99f0-65d2bbe41fb9.jpg"
+  },
+  "vault": {
+    "class": "vault",
+    "file": "vault.jpg",
+    "source": "0cb7925a-41dd-4c47-9088-463a1a6ee4c1.jpg"
+  }
+}

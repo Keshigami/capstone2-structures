@@ -1,0 +1,16 @@
+{
+  "classes": [
+    "altar",
+    "apse",
+    "bell_tower",
+    "column",
+    "dome(inner)",
+    "dome(outer)",
+    "flying_buttress",
+    "gargoyle",
+    "stained_glass",
+    "vault"
+  ],
+  "image_size": 224,
+  "backbone": "mobilenetv2"
+}

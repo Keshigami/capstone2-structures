@@ -1,0 +1,60 @@
+{
+ "folder": "capstone2-structures",
+ "slug": "capstone2-structures",
+ "port": 8102,
+ "title": "Historical structures classifier",
+ "one_liner": "Upload a photo of a church or monument detail and a transfer-learned CNN names which of ten architectural elements it is, with a confidence.",
+ "duration_s": 68.6,
+ "highlight_s": 11.2,
+ "steps": [
+  {
+   "n": 1,
+   "text": "Capstone 2, part 1: ten classes of heritage structure; pick a gallery sample",
+   "ok": true,
+   "t": 2.5
+  },
+  {
+   "n": 2,
+   "text": "Altar: one click classifies it",
+   "ok": true,
+   "t": 6.3
+  },
+  {
+   "n": 3,
+   "text": "Top-3 bars: the class and its confidence",
+   "ok": true,
+   "t": 16.2
+  },
+  {
+   "n": 4,
+   "text": "Apse",
+   "ok": true,
+   "t": 20.9
+  },
+  {
+   "n": 5,
+   "text": "Bell tower",
+   "ok": true,
+   "t": 30.8
+  },
+  {
+   "n": 6,
+   "text": "Model numbers: test accuracy, best validation accuracy, epochs",
+   "ok": true,
+   "t": 40.8
+  },
+  {
+   "n": 7,
+   "text": "Train versus validation curves; the dashed line is where augmentation switches on",
+   "ok": true,
+   "t": 46.7
+  },
+  {
+   "n": 8,
+   "text": "Per-class test accuracy",
+   "ok": true,
+   "t": 57.4
+  }
+ ],
+ "skipped": []
+}

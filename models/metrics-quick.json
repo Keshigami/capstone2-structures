@@ -1,0 +1,246 @@
+{
+  "mode": "quick",
+  "backbone": "mobilenetv2",
+  "image_size": 160,
+  "batch_size": 32,
+  "classes": [
+    "altar",
+    "apse",
+    "bell_tower",
+    "column",
+    "dome(inner)",
+    "dome(outer)",
+    "flying_buttress",
+    "gargoyle",
+    "stained_glass",
+    "vault"
+  ],
+  "images": {
+    "train": 1280,
+    "val": 220,
+    "test": 1473,
+    "per_class_train": {
+      "altar": 128,
+      "apse": 128,
+      "bell_tower": 128,
+      "column": 128,
+      "dome(inner)": 128,
+      "dome(outer)": 128,
+      "flying_buttress": 128,
+      "gargoyle": 128,
+      "stained_glass": 128,
+      "vault": 128
+    },
+    "per_class_test": {
+      "altar": 140,
+      "apse": 57,
+      "bell_tower": 170,
+      "column": 210,
+      "dome(inner)": 86,
+      "dome(outer)": 168,
+      "flying_buttress": 78,
+      "gargoyle": 238,
+      "stained_glass": 162,
+      "vault": 164
+    },
+    "available_train": 10235,
+    "corrupt_removed": {
+      "train": 0,
+      "test": 3
+    }
+  },
+  "epochs": {
+    "baseline": 2,
+    "augmented": 2,
+    "total": 4,
+    "phases": [
+      {
+        "phase": "baseline",
+        "epochs": 2,
+        "best_val_accuracy": 0.9363636374473572,
+        "stopped_at_threshold": false
+      },
+      {
+        "phase": "augmented",
+        "epochs": 2,
+        "best_val_accuracy": 0.8909090757369995,
+        "stopped_at_threshold": false
+      }
+    ]
+  },
+  "train_accuracy": 0.8960937261581421,
+  "train_accuracy_final": 0.6851562261581421,
+  "val_accuracy": 0.9363636374473572,
+  "best_epoch": 2,
+  "val_accuracy_final": 0.800000011920929,
+  "selected_phase": "baseline",
+  "test_accuracy": 0.8934147997284454,
+  "test_loss": 0.4398352801799774,
+  "per_class_test_accuracy": {
+    "altar": 0.9714285714285714,
+    "apse": 0.5263157894736842,
+    "bell_tower": 0.9,
+    "column": 0.7904761904761904,
+    "dome(inner)": 0.9069767441860465,
+    "dome(outer)": 0.9642857142857143,
+    "flying_buttress": 0.9871794871794872,
+    "gargoyle": 0.9201680672268907,
+    "stained_glass": 0.9197530864197531,
+    "vault": 0.8902439024390244
+  },
+  "confusion_matrix": [
+    [
+      136,
+      0,
+      0,
+      1,
+      1,
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      30,
+      14,
+      0,
+      0,
+      2,
+      11,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      153,
+      3,
+      0,
+      8,
+      4,
+      2,
+      0,
+      0
+    ],
+    [
+      0,
+      7,
+      5,
+      166,
+      0,
+      0,
+      19,
+      12,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      78,
+      0,
+      0,
+      0,
+      1,
+      6
+    ],
+    [
+      0,
+      1,
+      3,
+      0,
+      1,
+      162,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      77,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      0,
+      1,
+      14,
+      219,
+      0,
+      2
+    ],
+    [
+      5,
+      0,
+      0,
+      1,
+      3,
+      0,
+      1,
+      0,
+      149,
+      3
+    ],
+    [
+      11,
+      0,
+      0,
+      0,
+      2,
+      0,
+      3,
+      0,
+      2,
+      146
+    ]
+  ],
+  "history": {
+    "accuracy": [
+      0.7164062261581421,
+      0.8960937261581421,
+      0.710156261920929,
+      0.6851562261581421
+    ],
+    "val_accuracy": [
+      0.9227272868156433,
+      0.9363636374473572,
+      0.8909090757369995,
+      0.800000011920929
+    ],
+    "loss": [
+      2.244288682937622,
+      0.41909974813461304,
+      1.2953177690505981,
+      1.1682283878326416
+    ],
+    "val_loss": [
+      0.47064539790153503,
+      0.2830393314361572,
+      0.40740203857421875,
+      0.617169976234436
+    ]
+  },
+  "wall_time_seconds": 18.4,
+  "train_seconds": 12.8,
+  "trained_at": "2026-11-07T19:52:06+00:00",
+  "versions": {
+    "tensorflow": "2.21.0",
+    "keras": "3.15.1"
+  }
+}
